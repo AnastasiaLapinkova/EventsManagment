@@ -6,6 +6,7 @@ BEGIN
 END;
 GO
 USE EventsManagementDB;
+
 IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.tables WHERE name = 'Events')
 BEGIN
 CREATE TABLE Events (
@@ -17,6 +18,7 @@ EndDate DATE NOT NULL
 );
 END;
 GO
+
 IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.tables WHERE name = 'Participants')
 BEGIN
 CREATE TABLE Participants(
@@ -26,6 +28,7 @@ Description VARCHAR(500)
 );
 END;
 GO
+
 IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.tables WHERE name = 'ParticipantEvents')
 BEGIN
 CREATE TABLE ParticipantEvents(
@@ -35,6 +38,7 @@ EventID INT NOT NULL
 );
 END;
 GO
+
 IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.objects WHERE name = 'FK_ParticipantID')
 BEGIN
 ALTER TABLE ParticipantEvents
@@ -148,13 +152,6 @@ PaymentDate DATE
 END;
 GO
 
---IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.objects WHERE name = 'FK_PaymentsID')
---BEGIN
---ALTER TABLE Orders
---ADD CONSTRAINT FK_PaymentsID FOREIGN KEY (PaymentID) REFERENCES Payments(PaymentsID);
---END;
---GO
-
 IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.tables WHERE name = 'Locations')
 BEGIN
 CREATE TABLE Locations(
@@ -186,6 +183,12 @@ ADD CONSTRAINT FK_LocationsID FOREIGN KEY (LocationID) REFERENCES Locations(Loca
 END;
 GO
 
+IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.objects WHERE name = 'FK_TicketEventID')
+BEGIN
+ALTER TABLE Tickets
+ADD CONSTRAINT FK_TicketEventID FOREIGN KEY (EventID) REFERENCES Events(EventID);
+END;
+GO
 
 IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.tables WHERE name = 'Discounts')
 BEGIN
@@ -197,13 +200,6 @@ TicketID INT NOT NULL
 );
 END;
 GO
-/*
-IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.objects WHERE name = 'FK_DiscountsID')
-BEGIN
-ALTER TABLE Discounts
-ADD CONSTRAINT FK_DiscountsID FOREIGN KEY (DiscountsID) REFERENCES Orders(DiscountID);
-END;
-GO
 
 IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.objects WHERE name = 'FK_DiscountsTicketID')
 BEGIN
@@ -211,4 +207,45 @@ ALTER TABLE Discounts
 ADD CONSTRAINT FK_DiscountsTicketID FOREIGN KEY (TicketID) REFERENCES Tickets(TicketID);
 END;
 GO
-*/
+
+IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.tables WHERE name = 'Orders')
+BEGIN
+CREATE TABLE Orders(
+OrdersID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+TicketID INT NOT NULL,
+UserID INT NOT NULL,
+Quantity INT NOT NULL,
+PaymentID INT NOT NULL,
+DiscountID INT NOT NULL,
+OrdersStatus VARCHAR(25) NOT NULL,
+);
+END;
+GO
+
+IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.objects WHERE name = 'FK_DiscountsID')
+BEGIN
+ALTER TABLE Orders
+ADD CONSTRAINT FK_DiscountsID FOREIGN KEY (DiscountID) REFERENCES Discounts(DiscountsID);
+END;
+GO
+
+IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.objects WHERE name = 'FK_Payment_Orders')
+BEGIN
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Payment_Orders FOREIGN KEY (PaymentID) REFERENCES Payments(PaymentsID);
+END;
+GO
+
+IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.objects WHERE name = 'FK_Ticket_Orders')
+BEGIN
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Ticket_Orders FOREIGN KEY (TicketID) REFERENCES Tickets(TicketID);
+END;
+GO
+
+IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.objects WHERE name = 'FK_Users_Orders')
+BEGIN
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Users_Orderss FOREIGN KEY (UserID) REFERENCES Users(UserID);
+END;
+GO
