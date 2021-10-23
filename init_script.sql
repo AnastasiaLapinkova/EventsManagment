@@ -246,6 +246,6 @@ GO
 IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.objects WHERE name = 'FK_Users_Orders')
 BEGIN
 ALTER TABLE Orders
-ADD CONSTRAINT FK_Users_Orderss FOREIGN KEY (UserID) REFERENCES Users(UserID);
+ADD CONSTRAINT FK_Users_Orders FOREIGN KEY (UserID) REFERENCES Users(UserID);
 END;
 GO
