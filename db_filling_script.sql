@@ -2,6 +2,7 @@
 DELETE FROM Events
 DELETE FROM Locations
 DELETE FROM Types
+DELETE FROM EventTypes
 
 SET IDENTITY_INSERT Events ON;
 INSERT INTO Events(EventID,Name,Description,StartDate,EndDate)
