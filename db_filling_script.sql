@@ -1,6 +1,8 @@
 ﻿DELETE FROM Tickets
 DELETE FROM Events
 DELETE FROM Locations
+DELETE FROM Types
+
 SET IDENTITY_INSERT Events ON;
 INSERT INTO Events(EventID,Name,Description,StartDate,EndDate)
 VALUES (
@@ -92,25 +94,55 @@ VALUES
 SELECT * FROM Locations
 SET IDENTITY_INSERT Locations OFF;
 
-INSERT INTO Tickets(Price,TicketName,EventID,LocationID) 
+SET IDENTITY_INSERT Tickets ON;
+INSERT INTO Tickets(TicketID,Price,TicketName,EventID,LocationID) 
 VALUES
-(1200,'Абонемент на 3 дні',1,1),
-(400,'Наметове містечко',1,1),
-(40,'Загальний квиток',10,9),
-(30,'Пільговий квиток',10,9),
-(450,'Fan 1',7,10),
-(250,'Fan 2',7,10),
-(359,'Фан зона',2,2),
-(1420,'Партер',3,3),
-(1100,'Балкон 1',3,3),
-(850,'Балкон 2',3,3),
-(50,'Вхід на фестиваль',4,4),
-(100,'Вхід на фестиваль + келих',4,4),
-(1790,'Fan 1',5,5),
-(1390,'Fan 2',5,5),
-(280,'Партер',6,6),
-(240,'Балкон 1',6,6),
-(200,'Балкон 2',6,6),
-(250,'Зал',8,7),
-(200,'Зал',9,8);
+(1,1200,'Абонемент на 3 дні',1,1),
+(2,400,'Наметове містечко',1,1),
+(3,40,'Загальний квиток',10,9),
+(4,30,'Пільговий квиток',10,9),
+(5,450,'Fan 1',7,10),
+(6,250,'Fan 2',7,10),
+(7,359,'Фан зона',2,2),
+(8,1420,'Партер',3,3),
+(9,1100,'Балкон 1',3,3),
+(10,850,'Балкон 2',3,3),
+(11,50,'Вхід на фестиваль',4,4),
+(12,100,'Вхід на фестиваль + келих',4,4),
+(13,1790,'Fan 1',5,5),
+(14,1390,'Fan 2',5,5),
+(15,280,'Партер',6,6),
+(16,240,'Балкон 1',6,6),
+(17,200,'Балкон 2',6,6),
+(18,250,'Зал',8,7),
+(19,200,'Зал',9,8);
 SELECT * FROM Tickets
+SET IDENTITY_INSERT Tickets OFF;
+
+SET IDENTITY_INSERT Types ON;
+INSERT INTO Types(TypeID, TypeName, AgeRestriction) 
+VALUES
+(1,'Концерт',null),
+(2,'Фестиваль','18+'),
+(3,'Театр',null),
+(4,'Стендап','18+'),
+(5,'Дитяча',null),
+(6,'Екскурсія',null);
+SELECT * FROM Types
+SET IDENTITY_INSERT Types OFF;
+
+SET IDENTITY_INSERT EventTypes ON;
+INSERT INTO EventTypes(EventTypeID,EventID,TypeID ) 
+VALUES
+(1,1,2),
+(2,2,1),
+(3,3,1),
+(4,4,2),
+(5,5,1),
+(6,6,3),
+(7,7,1),
+(8,8,4),
+(9,9,5),
+(10,10,6);
+SELECT * FROM EventTypes
+SET IDENTITY_INSERT EventTypes OFF;
