@@ -75,7 +75,7 @@ BEGIN
 CREATE TABLE Types(
 TypeID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 TypeName VARCHAR(50) NOT NULL,
-AgeRestriction VARCHAR(10)
+AgeRestriction int
 );
 END;
 GO
