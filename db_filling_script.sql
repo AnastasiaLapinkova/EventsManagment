@@ -1,4 +1,5 @@
-﻿DELETE FROM Tickets
+﻿USE EventsManagementDB;
+DELETE FROM Tickets
 DELETE FROM EventTypes
 DELETE FROM Events
 DELETE FROM Locations
@@ -124,9 +125,9 @@ SET IDENTITY_INSERT Types ON;
 INSERT INTO Types(TypeID, TypeName, AgeRestriction) 
 VALUES
 (1,'Концерт',null),
-(2,'Фестиваль','18+'),
+(2,'Фестиваль',18),
 (3,'Театр',null),
-(4,'Стендап','18+'),
+(4,'Стендап',18),
 (5,'Дитяча',null),
 (6,'Екскурсія',null);
 SELECT * FROM Types
