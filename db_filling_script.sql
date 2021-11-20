@@ -1,4 +1,8 @@
 ﻿USE EventsManagementDB;
+
+DELETE FROM Orders
+DELETE FROM Payments
+DELETE FROM Discounts
 DELETE FROM Tickets
 DELETE FROM EventTypes
 DELETE FROM Locations
@@ -278,3 +282,89 @@ VALUES (
 );
 SET IDENTITY_INSERT Feedbacks OFF;
 SELECT * FROM Feedbacks
+
+SET IDENTITY_INSERT Discounts ON;
+INSERT INTO Discounts(DiscountsID,DiscountName,Amount,TicketID) 
+VALUES
+(1,'Best deal',50,1),
+(2,'Quantity discount',100,1),
+(3,'Best deal',50,3),
+(4,'Quantity discount',50,2),
+(5,'Quantity discount',50,4),
+(6,'Best deal',75,6),
+(7,'Quantity discount',50,5),
+(8,'Quantity discount',150,9),
+(9,'Best deal',50,13),
+(10,'Quantity discount',100,13),
+(11,'Quantity discount',75,14);
+SET IDENTITY_INSERT Discounts OFF;
+SELECT * FROM Discounts
+
+SET IDENTITY_INSERT Payments ON;
+INSERT INTO Payments(PaymentsID,Amount,PaymentDate) 
+VALUES
+(1,1150,'06/05/2021'),
+(2,2300,'06/06/2021'),
+(3,1550,'06/06/2021'),
+(4,4400,'06/07/2021'),
+(5,90,'06/07/2021'),
+(6,2200,'06/08/2021'),
+(7,30,'06/09/2021'),
+(8,1390,'06/10/2021'),
+(9,560,'06/11/2021'),
+(10,5160,'06/11/2021'),
+(11,3380,'06/12/2021'),
+(12,20,'06/14/2021'),
+(13,750,'06/14/2021'),
+(14,1040,'06/15/2021'),
+(15,2850,'06/16/2021'),
+(16,1779,'06/17/2021'),
+(17,1700,'06/17/2021'),
+(18,400,'06/18/2021'),
+(19,5260,'06/19/2021'),
+(20,560,'06/20/2021'),
+(21,480,'06/21/2021'),
+(22,1740,'06/22/2021'),
+(23,1700,'06/23/2021'),
+(24,71.8,'06/24/2021'),
+(25,2840,'06/25/2021'),
+(26,6,'06/26/2021'),
+(27,5,'06/27/2021');
+SET IDENTITY_INSERT Payments OFF;
+SELECT * FROM Payments
+
+SET IDENTITY_INSERT Orders ON;
+INSERT INTO Orders(OrdersID,TicketID,UserID,Quantity,PaymentID,DiscountID,OrdersStatus) 
+VALUES
+(1,1,1,1,1,1,'paid'),
+(2,1,2,2,2,1,'paid'),
+(3,1,3,1,3,1,'paid'),
+(4,2,3,1,3,null,'paid'),
+(5,1,4,4,4,2,'paid'),
+(6,5,5,2,5,null,'booked'),
+(7,9,6,2,6,null,'paid'),
+(8,12,7,3,7,null,'booked'),
+(9,14,8,1,8,null,'paid'),
+(10,15,9,2,9,null,'paid'),
+(11,13,10,4,10,10,'paid'),
+(12,13,12,2,11,9,'paid'),
+(13,19,1,1,12,null,'booked'),
+(14,18,2,3,13,null,'paid'),
+(15,15,9,2,14,null,'paid'),
+(16,16,9,2,14,null,'paid'),
+(17,9,2,3,15,8,'paid'),
+(18,4,3,2,26,null,'booked'),
+(19,7,6,1,16,null,'paid'),
+(20,8,6,1,16,null,'paid'),
+(21,10,8,2,17,null,'paid'),
+(22,11,12,1,27,null,'booked'),
+(23,17,11,2,18,null,'paid'),
+(24,14,9,4,19,11,'paid'),
+(25,15,5,2,20,null,'paid'),
+(26,16,4,2,21,null,'paid'),
+(27,13,8,1,22,9,'paid'),
+(28,10,8,2,23,null,'paid'),
+(29,7,9,2,24,null,'booked'),
+(30,8,8,2,25,null,'paid');
+SET IDENTITY_INSERT Orders OFF;
+SELECT * FROM Orders
