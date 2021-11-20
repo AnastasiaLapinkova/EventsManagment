@@ -194,7 +194,7 @@ GO
 IF NOT EXISTS (SELECT * FROM EventsManagementDB.sys.tables WHERE name = 'Discounts')
 BEGIN
 CREATE TABLE Discounts(
-DiscountsID INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+DiscountsID INT not Null PRIMARY KEY IDENTITY(1,1),
 DiscountName VARCHAR(25) NOT NULL,
 Amount DECIMAL(10,2) NOT NULL,
 TicketID INT NOT NULL
@@ -217,7 +217,7 @@ TicketID INT NOT NULL,
 UserID INT NOT NULL,
 Quantity INT NOT NULL,
 PaymentID INT NOT NULL,
-DiscountID INT NOT NULL,
+DiscountID INT ,
 OrdersStatus VARCHAR(25) NOT NULL,
 );
 END;
