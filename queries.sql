@@ -419,3 +419,159 @@ ORDER BY PaymentsID
 SELECT LocationsID, City, Address, TotalQuantity
 FROM Locations
 ORDER BY TotalQuantity desc
+
+
+
+/*Ігор*/
+
+/* 1. Вибір локації де кількість мість є меншою 500  */
+
+SELECT * 
+FROM Locations 
+Where TotalQuantity<=500
+
+/* 2. Вибір квитків для локації 6 в поряжку спадання ціни  */
+
+SELECT TicketID,TicketName, Price
+FROM Tickets 
+Where LocationID=6
+Order by Price DESC
+
+/* 3. Вибір найдешевшово квитка з 1 або 2 локації */
+
+SELECT  min(Price) as "Найдешевший квиток"
+from Tickets
+Where LocationID= 1 or LocationID= 2
+
+/* 4. Підрахунок доходу від продажу квитків за дану дату */
+
+SElECT SUM(Amount) as "Дохід за 06/06/2021"
+From Payments
+WHERE PaymentDate='06/06/2021'
+
+/* 5. Вибір знижок та кількості квитків проданих з цією знижкою */
+
+SELECT Discounts.DiscountName, Orders.DiscountID,Orders.Quantity
+FROM Orders
+INNER JOIN Discounts
+ON Orders.DiscountID = Discounts.DiscountsID
+ORDER BY Quantity desc
+
+/* 6. Пошук контактної інформації жінок з RoleID - 1 */
+
+Select Distinct FullName, Email,PhoneNumber
+From Users
+Where RoleID=1 AND Sex='Female'
+Order by FullName Asc
+
+/* 7. Визначення кількості бонусних балів відносно суми платежу */
+
+Select Amount,PaymentDate,
+Case	
+	When Amount<500 Then 'Нарахувати 10 балів'
+	When Amount >500 and Amount<1000 Then 'Нарахувати 20 балів'
+	When Amount > 1000 Then 'Нарахувати 30 балів'
+END number_of_points
+From Payments
+
+/* 8. Визначення імен та контактного телефону для клієнтів які придбали більше 2 квитків*/
+
+SELECT Distinct Orders.UserID, Users.FullName, Users.PhoneNumber,Orders.Quantity
+FROM Orders
+INNER JOIN Users
+ON Orders.UserID = Users.UserID
+Where Quantity>2
+ORDER BY Users.FullName desc
+
+/* 9. Пошук інформації щодо фідбеку на подію, її назву та користувача хто залишив даний фідбек */
+
+SELECT Distinct Feedbacks.FeedbackText, Users.FullName,Events.Name
+FROM Feedbacks
+INNER JOIN Events
+ON Feedbacks.EventID = Events.EventID
+INNER JOIN Users
+ON Users.UserID=Feedbacks.UserID
+ORDER BY Users.FullName desc
+
+/* 10. Вибір івентів на яких квитки є дорожчими ніж 1000 грн.  */
+
+SELECT Distinct EventID, Name, StartDate,EndDate FROM Events WHERE EventID IN (
+	SELECT DISTINCT LocationID FROM Tickets WHERE Price>1000
+)
+
+/* 11. Визначення середньої вартості оплаченого замовлення  */
+
+SELECT  AVG(Amount) AS 'Середня вартість замовлення'
+FROM Payments
+
+/* 12. Показує список користувачів молодших 35 років і їх контактні номери  */
+
+SELECT #TempTable.Name, Age, Contact_number
+FROM (SELECT Users.FullName AS Name, Users.PhoneNumber AS Contact_number, (DATEDIFF(YEAR, Users.BirthDate,GETDATE())) as Age FROM Users) #TempTable 
+GROUP BY Age, #TempTable.Name, Contact_number
+HAVING Age < 35
+  
+
+ /* 13. Показує оплату, статус замовлення за номером замовлення  */
+
+SELECT Distinct Payments.PaymentDate,Payments.PaymentsID, Orders.DiscountID, Orders.OrdersStatus
+FROM Payments
+INNER JOIN Orders
+ON Orders.PaymentID = Payments.PaymentsID
+ WHERE OrdersID = 4
+
+ /* 14. Показує список неоплачених замовлень  */
+
+SELECT OrdersID,OrdersStatus 
+FROM Orders 
+WHERE OrdersStatus = 'booked'
+
+/* 15. Показує список користувачів, що зробили замовлення, в яких в UserID присутня цифра 1  */
+
+SELECT  Distinct Orders.TicketID, Orders.UserID, Discounts.DiscountName,Orders.OrdersStatus
+FROM Orders
+INNER JOIN Discounts
+ON Orders.DiscountID = Discounts.DiscountsID
+WHERE Orders.UserID LIKE '%1%'
+
+/* 16.  Вибір найдешевшого квитка для кожної локації в місті Львів */
+
+SELECT  min(Price) as "Найдешевший квиток", Locations.Address, Locations.TotalQuantity
+from Tickets
+INNER JOIN Locations
+ON Locations.LocationsID=Tickets.LocationID
+Where City= 'Lviv'
+Group by Locations.Address, Locations.TotalQuantity
+
+/* 17.  Вибір усіх квитків на події, які починаються в 2021 році та ціною квитка більше 100 грн.*/
+
+SELECT Distinct Events.StartDate, Tickets.TicketID, Tickets.TicketName, Tickets.LocationID
+From Events
+INNER JOIN Tickets
+ON Tickets.EventID=Events.EventID
+Where Tickets.Price>100 AND Events.StartDate < '12/31/2021'
+
+/* 18.  Вибір усіх користувачів, які є чоловіками */
+
+SELECT *
+From Users
+Where Sex='Male' AND RoleID=1
+
+/* 19.  Вибір інформації про користувачів які оплатили замовлення на суму більшу ніж 1500 грн. */
+
+SELECT Distinct Users.FullName, Payments.Amount, Orders.DiscountID
+From Users
+INNER JOIN Orders
+ON Orders.UserID=Users.UserID
+INNER JOIN Payments
+ON Payments.PaymentsID=Orders.PaymentID
+WHERE Payments.Amount>1500
+
+/* 20.  Вибір інформації про замовлення з сумою знижки менше 100 грн. */
+
+SELECT Distinct Orders.TicketID, Discounts.DiscountName, Orders.DiscountID, Discounts.Amount, Orders.UserID
+FROM Orders
+INNER Join Discounts
+ON Orders.DiscountID=Discounts.DiscountsID
+Where Discounts.Amount<100
+Order by UserID ASC
